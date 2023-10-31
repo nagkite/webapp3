@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SQL Query Processor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .output-container {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        pre {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>SQL Query Processor</h1>
+    <div class="container">
+        <!-- Option 1: Enter SQL Syntax -->
+        <div class="form-container">
+            <h2>Option 1: Enter SQL Syntax</h2>
+            <form method="POST" action="/" id="sqlSyntaxForm">
+                <textarea name="sql_syntax" rows="5" placeholder="Enter SQL Syntax"></textarea>
+                <div class="btn-container">
+                    <input type="submit" value="Process SQL">
+                </div>
+            </form>
+        </div>
+
+        <!-- Option 2: Upload SQL File -->
+        <div class="form-container">
+            <h2>Option 2: Upload SQL File</h2>
+            <form method="POST" action="/" enctype="multipart/form-data" id="sqlFileForm">
+                <input type="file" name="sql_file">
+                <div class="btn-container">
+                    <input type="submit" value="Upload SQL File">
+                </div>
+            </form>
+        </div>
+
+        <!-- Output Container -->
+        <div class="output-container">
+            <h2>Corrected SQL Query</h2>
+            <pre id="corrected_sql_query"></pre>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector("#sqlSyntaxForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var sqlQuery = document.querySelector("textarea[name='sql_syntax']").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/");
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            var formData = "sql_syntax=" + encodeURIComponent(sqlQuery);
+            xhr.send(formData);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.querySelector("#corrected_sql_query").textContent = xhr.responseText;
+                } else {
+                    alert("Error correcting SQL query: " + xhr.statusText);
+                }
+            };
+        });
+
+        document.querySelector("#sqlFileForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var formData = new FormData(document.querySelector("#sqlFileForm"));
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/");
+            xhr.send(formData);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.querySelector("#corrected_sql_query").textContent = xhr.responseText;
+                } else {
+                    alert("Error processing uploaded SQL file: " + xhr.statusText);
+                }
+            };
+        });
+    </script>
+</body>
+</html>
