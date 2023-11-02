@@ -4,7 +4,7 @@ from vertexai import language_models
 
 # Set the GOOGLE_APPLICATION_CREDENTIALS environment variable.
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'C:/Users/neosu/webapp1/mlproj1-403203-c24f2a45ebd5.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'C:/Users/neosu/webapp3/mlproj1-403203-c24f2a45ebd5.json'
 
 # Initialize Vertex AI.
 

@@ -1,75 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SQL Query Processor</title>
-    <style>
-        /* CSS styles as before */
-    </style>
+  <title>Log File Analyzer</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="analysis.js"></script>
 </head>
 <body>
-    <h1>SQL Query Processor</h1>
-    <div class="container">
-        <!-- Option 1: Enter SQL Syntax -->
-        <div class="form-container">
-            <h2>Option 1: Enter SQL Syntax</h2>
-            <form method="POST" action="/" id="sqlSyntaxForm">
-                <textarea name="sql_syntax" rows="5" placeholder="Enter SQL Syntax"></textarea>
-                <div class="btn-container">
-                    <input type="submit" value="Process SQL">
-                </div>
-            </form>
-        </div>
+  <h1>Log File Analyzer</h1>
 
-        <!-- Option 2: Upload SQL File -->
-        <div class="form-container">
-            <h2>Option 2: Upload SQL File</h2>
-            <form method="POST" action="/" enctype="multipart/form-data" id="sqlFileForm">
-                <input type="file" name="sql_file">
-                <div class="btn-container">
-                    <input type="submit" value="Upload SQL File">
-                </div>
-            </form>
-        </div>
+  <form action="/analyze" method="post" enctype="multipart/form-data">
+    <input type="file" id="logFile" name="logFile" accept=".txt">
+    <input type="submit" value="Analyze">
+  </form>
 
-        <!-- Output Container -->
-        <div class="output-container">
-            <h2>Corrected SQL Query</h2>
-            <pre id="corrected_sql_query"></pre>
-        </div>
-    </div>
-
-    <script>
-        document.querySelector("#sqlSyntaxForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            var sqlQuery = document.querySelector("textarea[name='sql_syntax']").value;
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/");
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            var formData = "sql_syntax=" + encodeURIComponent(sqlQuery);
-            xhr.send(formData);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    document.querySelector("#corrected_sql_query").textContent = xhr.responseText;
-                } else {
-                    alert("Error correcting SQL query: " + xhr.statusText);
-                }
-            };
-        });
-
-        document.querySelector("#sqlFileForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            var formData = new FormData(document.querySelector("#sqlFileForm"));
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/");
-            xhr.send(formData);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    document.querySelector("#corrected_sql_query").textContent = xhr.responseText;
-                } else {
-                    alert("Error processing uploaded SQL file: " + xhr.statusText);
-                }
-            };
-        });
-    </script>
+  <div id="analysisResults"></div>
 </body>
 </html>
